@@ -1,0 +1,36 @@
+
+
+\chapter{Introduction} \label{CH1_Introduction}
+%\vspace{-7mm}
+%\bigskip
+
+The complexity of modern software makes debugging difficult and time consuming. To debug a failing program, the developer needs to locate and isolate the fault first; a slow and tedious process known as Fault Localization (FL). If the failing tests only execute a few faulty program elements, FL is trivial. The complexity arises from the fact that failing tests often execute a large set of non-faulty program elements. Hence, simplification of failing tests, while keeping the bug, reduces the complexity of fault localization by reducing the number of non-faulty program elements the developers need to search. It focuses developers' attention on a few faulty program elements, leading to faster debugging times. Simplified failing tests are not only helpful aid to developers, it can significantly improve the accuracy of automatic fault localization techniques~\cite{vince2021reduction,christi18reduce}. These automatic fault localization techniques have the goal of automatically finding the faulty program elements without the need of a developer to search through them. While a long, complex, failing test leads to longer execution times for these techniques, simplifying the unit tests before this step reduces the execution time significantly.
+
+The most widely known and utilized automatic test simplification technique is the Delta Debugging (DD) algorithm, by Zeller and HildeBrandt. This algorithm works well on test inputs that can be considered array or list-like structures~\cite{zeller2002simplifying}. Additionally, it is not the most effective technique for tests that have tree-like structures as seen in HTML files, C or java programs, or XML files. This is due to the fact that it only works on a flat structure, or in other words, will not break apart smaller blocks in order to simplify those sections as well. However, Mishreghi and Su proposed the Hierarchical Delta Debugging (HDD) algorithm that utilizes the underlying Abstract Syntax Tree (AST) structure to effectively simplify these unit tests. ~\cite{misherghi2006hdd}. 
+
+Recently, a few researchers proposed modern implementations of HDD algorithms and their variants~\cite{hodovan2016modernizing, perses, gopinath2020abstracting, stepanov2019reduktor}. Most of the implementations are language-agnostic and, hence, can reduce a variety of tests in languages such as HTML, XML, C, or java. Stepanov et al. noted the language-agnosticism of the HDD tools. This is a major limiting factor in employing the tools efficiently for real-world, large-scale usage as the tools fail to consider and utilize the language-specific features, complexities, and inter-dependencies~\cite{stepanov2019reduktor}. These tools rely on a generic AST or grammar in the simplification process and produce many noncompilable intermediate variants before the convergence. Sun et al. noted the need of producing syntactically correct intermediate test variants while proposing the \emph{Perses} algorithm~\cite{perses}.  Also, most of the tools rely on many libraries, components, and external tools that need to be up-to-date all the time to utilize the tools. Binkley et al. argue that the cost of development and maintenance is prohibitive for program slicing tools (DD/HDD produces a slice) due to the need of a large set of libraries and components~\cite{binkley2014orbs}. Many of these tools require a certain preprocessing step before they can be utilized to simplify tests~\cite{perses, hodovan2016modernizing}. 
+
+Instead of focusing on varying sets of test inputs and test cases, the focus was on \emph{developer-written} \emph{C\#} unit tests. As we focused our attention, observed, and studied unit tests implemented in C\# by developers, we noticed that we can utilize new avenues to implement a test reduction tool that is applicable, accurate, and easy to use. 
+
+To this end, we propose a tool, \mytool, that provides the following: 
+
+\begin{enumerate}
+    \item A tool specifically implemented for C\# tests that utilizes language-specific features of C\# programs and tests. 
+    \item A tool that utilizes an empirical analysis to prune the search space.
+    \item A tool that exists as a stand-alone entity and does not require any further libraries or tool sets. This tool can be invoked using an executable file. 
+    \item A tool that requires absolutely no preprocessing steps.
+\end{enumerate}
+
+We evaluate \mytool on a set of 30 failing tests on 5 open source C\# projects to demonstrate that \mytool is applicable and accurate. The tool can produce correct test simplifications with high precision (96.58\%) and recall (96.45\%). \mytool is publicly available on GitHub. 
+
+
+
+
+
+
+
+
+
+
+
+

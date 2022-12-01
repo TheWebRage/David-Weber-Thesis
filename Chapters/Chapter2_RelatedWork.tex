@@ -1,0 +1,28 @@
+\clearpage % clear the prior chapter's page
+
+\chapter{Related Work}\label{CH2_RelatedWork}
+%\vspace{-7mm}
+%\bigskip
+
+\section{DD and HDD}
+DD is an algorithm that simplifies failing tests while still keeping the bug by utilizing a variant of binary search to remove individual components that are unnecessary for triggering the bug~\cite{zeller2002simplifying}. To retrofit DD for hierarchical test inputs like XML, HTML, or programs, the top syntax tree is used as a flat structure. This means the elements would include blocks of nested elements for removal. This method is temporally efficient since it doesn't entail further nested elements.
+
+While DD is useful alone, it is not effective for all scenarios. This led Misherghi and Su to propose that HDD works efficiently and effectively on tree-like inputs by exploiting the underlying AST~\cite{misherghi2006hdd}. This AST allows for the HDD algorithm to break down the blocks of code into smaller blocks of code, thus allowing for the algorithm to run recursively. While both DD and HDD are theoretically sound algorithms that guarantee convergence and minimalism, HDD is able to break down the statements further, allowing for more effective simplification. 
+
+One well-known program used to reduce, \emph{C-Reduce}, is used to reduce programs written in the C language. Regehr et al. utilized DD/HDD to propose \emph{C-Reduce} to minimize these programs for compiler testing~\cite{regehr_eide_chen_2019}. This is a much more powerful program than others with a similar purpose. This is due to the program allowing it to perform all of the same abilities of both DD and HDD in one program, allowing the user to use one program for both scenarios. 
+
+\section{Additional resources}
+Even though HDD was able to create a tree structure, it did not do anything about changing the structure of the syntax tree. This would lead the tree to be imbalanced at times, depending on the specific structure. This led Hodovan and Kiss to research further, and claim that Extended Context Free Grammar produces a more balanced tree than one produced by Context Free Grammar. They then utilized it in implementing a modernized HDD tool called picireny~\cite{hodovan2016modernizing}.
+
+Herfert et al. proposed an additional algorithm known as the Generalized Tree Reduction (GTR) algorithm. The GTR algorithm relies on operations other than removal or deletion and replacing a tree node with a similar tree node~\cite{Herfert2017GTR}. This presented an effective alternative to DD and presented the idea that DD/HDD is not the only syntax tree simplification option.
+
+While all these resources find ways of improving the algorithm itself, there are plenty of other areas for performance boosts. Sun et al. observed that during the simplification process, many previous algorithms produced \emph{syntactically invalid variants}. A futile compilation step needs to be performed before pruning the invalid variant. They proposed the \emph{Perses} algorithm specifically to avoid generation of invalid variants~\cite{perses}. By knowing about these \emph{syntactically invalid variants} before compiling, it makes the application of these algorithms more time efficient since it reduces the amount of time compiling each variant.
+
+Another useful algorithm was found with the need to generalize test inputs. Gopinath et al. utilized the \emph{Perses} algorithm to propose the \emph{DDSET} algorithm to abstract minimal failure-inducing input from a larger set using input grammar~\cite{gopinath2020abstracting}. This is a very unique approach to the problem and allows information to be captured about the unit test failure at the source in order to provide a better picture about the issue.
+
+A large problem with the research so far is the level of abstraction with it. There are several different languages that each provide their own syntax, creating issues with each specific language. This led \emph{Picireny}, \emph{Perses}, and \emph{DDSET} to use Antlr, a powerful parser generator, to produce the AST for specific programming languages. Antlr provides the ability to produce a parser for several programming languages without creating each individually.
+
+Binkley et al. proposed another useful resource as the \emph{Observational-based Slicing} (ORBS) technique. This technique uses program line deletion as a fundamental operation to slice programs accurately and efficiently~\cite{binkley2014orbs}. This deletes potential slices of the program and observes and compares the behavior of the program before and after deletion. If the program behaves the same in both the original and the slice, then the deletion is kept. This is another useful technique to use for different situations where the alternatives do not make sense.
+
+An additional resource came from Christi et al. when they combined inverted HDD with statement deletion mutation to simplify programs for the purpose of resource adaptations. They argued that reduction is meaningful and useful at statement level and avoided non-statement level reductions~\cite{christi2017saso}. This presented the perspective that simplification performance can be effective by simply focusing on statement reduction rather than the alternative. 
+

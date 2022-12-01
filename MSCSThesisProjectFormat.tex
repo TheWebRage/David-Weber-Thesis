@@ -24,10 +24,58 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 
 \usepackage{textcomp}
 \usepackage{array}
+\usepackage[table, svgnames]{xcolor}
 \usepackage{listings}
+\lstloadlanguages{
+C,
+csh
+}
+% -- Defining colors:
+\definecolor{codegreen}{rgb}{0.1,0.46,0.1}
+\definecolor{codeorange}{rgb}{0.83,0.56,0.26}
+\definecolor{codeblack}{rgb}{0.1,0.1,0.1}
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{codegray},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{NavyBlue},
+    numberstyle=\tiny\color{codeblack},
+    stringstyle=\color{codeorange},
+    basicstyle=\ttfamily\footnotesize\bfseries,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=t,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+	morekeywords={ abstract, event, new, struct,as, explicit, null, switch,
+	base, extern, object, this,bool, false, operator, throw,break, finally, out, true,
+	byte, fixed, override, try,case, float, params, typeof,catch, for, private, uint,
+	char, foreach, protected, ulong,checked, goto, public, unchecked,
+	class, if, readonly, unsafe,const, implicit, ref, ushort,continue, in, return, using,
+	decimal, int, sbyte, virtual,	default, interface, sealed, volatile,
+	delegate, internal, short, void,do, is, sizeof, while,double, lock, stackalloc,
+	else, long, static,enum, namespace, string, try, catch, finally}
+}
+\lstset{
+  style=mystyle,
+  framexleftmargin=3.5mm,
+  frame=box,
+  rulesepcolor=\color{black},
+  linewidth=\linewidth,
+  xleftmargin=12pt,
+  aboveskip=12pt,
+  belowskip=12pt
+}
+
 \usepackage{setspace}
 \usepackage{mathptmx}
-\usepackage[table, svgnames]{xcolor}
 \usepackage{colortbl}
 \usepackage{graphicx}
 \usepackage{amssymb, amsmath}
@@ -41,6 +89,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{xspace}
 
 \usepackage[subfigure, titles]{tocloft}
 \usepackage{acronym}
@@ -74,13 +123,13 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \setcounter{secnumdepth}{7}
 \setcounter{tocdepth}{7}
 
-\usepackage{hyperref}
+\usepackage[hidelinks,colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=cyan,
-    pdftitle={Thesis Example},
+    pdftitle={Building Resource Adaptations via Test-Based Software Minimization},
     pdfpagemode=FullScreen,
 }%
 \urlstyle{same}
@@ -95,6 +144,9 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 
 % Prevent double spaced equations
 \newenvironment{tightequation}{\singlespace\begin{equation}}{\end{equation}}
+
+% Project Name
+\newcommand {\mytool}{ReduSharptor\xspace}
 
 % Extra junk to pretty up the table of contents
 \setlength{\cftsecnumwidth}{2.8em}
@@ -134,8 +186,6 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 % These 3 sections are optional 
 \singlespacing  
 %\doublespacing % Single or Double spacing for these sections?
-\input{Sections/Copyright}
-\input{Sections/Dedication}
 \input{Sections/Acknowledgments}
 \input{Sections/Abstract}
 
@@ -161,10 +211,19 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\input{Sections/Chapter1}
-\input{Sections/Chapter2}
-\input{Sections/Chapter3}
+\input{Chapters/Chapter1_Introduction}
+\input{Chapters/Chapter2_RelatedWork}
+\input{Chapters/Chapter3_Motivation}
+\input{Chapters/Chapter4_ToolUsage}
+\input{Chapters/Chapter5_Evaluation}
+\input{Chapters/Chapter6_Results}
+\input{Chapters/Chapter7_Conclusion}
 
+\singlespacing
+\appendix
+\input{Appendix/Method_BuildAndRun}
+\input{Appendix/Method_FindSmallestFailingInput}
+\input{Appendix/Method_Main}
 
 \singlespacing
 %\bibliographystyle{apalike}

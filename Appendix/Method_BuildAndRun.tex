@@ -1,0 +1,50 @@
+\clearpage % clear the prior chapter's page
+
+\label{BuildAndRun Method}
+%\vspace{-7mm}
+%\bigskip
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Build and run the test. Return the result
+/// </summary>
+/// <param name="testStatements">Test statements to test if successful</param>
+/// <returns>True if the test is successful. False if unsuccessful</returns>
+static public bool BuildAndRunTest(List<StatementSyntax> testStatements)
+{
+	// Write out statements to file
+	Extentions.SetTestStatements(testExample, testExample, testName, testStatements);
+
+	Console.WriteLine("Building current version of test.");
+
+	// Run the build command
+	if (!Extentions.ExecuteCommand("dotnet", "build \"" + testProj + "\""))
+	{
+		Console.WriteLine("Build failed. Continue searching for failing test.");
+
+		// We don't want to record build failures, so we return true to not remember them in the algorithm
+		return true;
+	}
+
+	Console.WriteLine("Running test for failure...");
+
+	bool isSuccessful = Extentions.ExecuteCommand("dotnet", "test \"" + testProj + "\" --filter \"FullyQualifiedName=" + Extentions.GetTestCallString(testExample, testName) + "\"");
+
+	if (isSuccessful)
+	{
+		Console.WriteLine("Test was successful. Continue looking for failing test.");
+	}
+	else
+	{
+		Console.WriteLine("Test was unsuccessful. Shrink test statements.");
+	}
+
+	// Run the test
+	return isSuccessful;
+}
+\end{lstlisting}
+\caption{BuildAndRunTest method in \mytool}
+\label{fig:buildAndRunTest1}
+%\vspace{-0.5in}
+\end{figure}

@@ -1,0 +1,73 @@
+\clearpage % clear the prior chapter's page
+
+\label{FindSmallestInput Method}
+%\vspace{-7mm}
+%\bigskip
+
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Finds the smallest input for the test and input provided for the test to continue to fail
+/// </summary>
+/// <typeparam name="T">Type of the list in the input</typeparam>
+/// <param name="array">Input array for the failing test</param>
+/// <param name="compareTestInput">Function to compare the test input against</param>
+/// <returns>A list of the smallest failing input for the test to continue to fail</returns>
+static public List<T> FindSmallestFailingInput<T>(List<T> array, Func<List<T>, bool> compareTestInput)
+{
+	int numSections = 2;
+
+	while (true)
+	{
+		bool isSuccessful = true;
+		List<List<T>> sectionedArray = GetDividedSections(numSections, array);
+
+		// Test the sections for failing input
+		foreach (List<T> arrSection in sectionedArray)
+		{
+			isSuccessful = compareTestInput(arrSection);
+
+			if (!isSuccessful && arrSection.Any())
+			{
+				// Section off failing input and try again
+				array = arrSection;
+				numSections = 2;
+				break;
+			}
+		}
+
+		if (!isSuccessful)	continue;
+
+		// Test the compliments of the sections for failing input
+		foreach (List<T> arrSection in sectionedArray)
+		{
+			List<T> compliment = GetSectionCompliment(sectionedArray, sectionedArray.IndexOf(arrSection));
+			isSuccessful = compareTestInput(compliment);
+
+			if (!isSuccessful && compliment.Any())
+			{
+				// Section off failing input and try again
+				array = compliment;
+				numSections = Math.Max(numSections - 1, 2);
+				break;
+			}
+		}
+
+		if (!isSuccessful)	continue;
+
+		// If all previous inputs pass, increase granularity, create more equal parts
+		numSections = 2 * numSections;
+
+		if (numSections > array.Count)
+		{
+			return array;
+		}
+	}
+}
+
+\end{lstlisting}
+\caption{FindSmallestFailingInput method in \mytool}
+\label{fig:findSmallestFailingInput1}
+%\vspace{-0.5in}
+\end{figure}

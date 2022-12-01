@@ -1,0 +1,100 @@
+\clearpage % clear the prior chapter's page
+
+\chapter{Results}\label{CH6_Results}
+%\vspace{-7mm}
+%\bigskip
+
+\section{Applicability}
+We used \mytool on 30 failing tests for 30 synthetic bugs in 5 open-source C\# projects as seen in Table~\ref{tab:results1}. We processed 759 statements. During the application, \mytool did not have any exceptions or unexpected behavior. We ran into a few issues but were quickly able to resolve them. \mytool was able to successfully finish and produce the minimal failing tests. The 5 projects we have selected were from a range of applications used for a variety of different uses consisting of different development styles. We can claim that \mytool is highly applicable due to the result of the experiments on the range of subjects.
+
+\section{Accuracy}
+We report accuracy using the gold standard measure of precision and recall used as a statistic benchmark. Precision is used as a measure of correctness of a result. Recall is used to determine the true positive rate, or how many true positives in the result. Using these as a standard, a result can be analyzed to infer the number of correct statements left, and how much confidence there is in the result. 
+
+This can be calculated with the following formulas where TP, FP, and FN have been collected previously: $recall = \frac{TP}{TP + FN}$ $precision = \frac{TP}{TP+FP}$. Using these formulas, we found \mytool has 96.58\% precision and 96.45\% recall. We can claim that \mytool is highly accurate in performing failing test minimization. 
+
+\section{Inaccuracy}
+Though we don't have a large data set, we evaluate our inaccuracies to further understand it. These inaccuracies consist of false positives and false negatives. False positives are statements that \mytool left in the test and parsed as needed statements when not needed. False negatives are statements that were removed and parsed as unneeded statements when in reality are needed to keep the failing logic. Both of these types of inaccuracies are not ideal to have, but false positive statements are better to handle since they just take time to run, however, false negatives are worse since these are needed to keep the same failing logic we are trying to reduce for.
+
+We note that most of the false negatives are due to \emph{Tree} statements. This makes sense since only \emph{NonTree} statements are processed that are just below the Roslyn~\cite{wagner_2021} \texttt{BlockStatmentSyntax} level. If a \emph{Tree} statement is present, we treat it as a single \emph{NonTree} statement based on our observation and simplified assumption. The presence of a \emph{Tree} statement will cause missed opportunities in processing that may result in the missed removal of statements. The high precision and recall numbers suggest that our observation was correct. Even if we treat \emph{Tree} statements as a single \emph{NonTree} statement, test minimization is very accurate in practice.
+
+Most of the false positives are due to tool limitations and other issues. While this type of failure makes up for most of the inaccuracies, these are not as serious issues as false negatives since the main result is more analysis afterward by the developer or automatic fault localization process.
+
+\section{Tool comparison}
+To the best of our knowledge, none of the test minimization tools that we previously discussed have a C\# implementation. To implement those techniques and algorithms in C\# for comparison purposes is beyond the scope of this paper. However, because of the results we have received, this research was submitted to the SANER2023 conference for their review. This would allow this to gain more attention and allow for more comparisons to be made.
+
+
+\begin{table}
+\caption{Simplified unit test and results of each }
+\begin{center}
+{\scriptsize
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Unit Test & \% Reduced & True Positives & False Positives & False Negatives \\
+\hline
+\hline
+{ListCombineTest} & 60\% & 3 & 0 & 0 \\
+\hline
+{EqualsTest} &  86\% & 1 & 0 & 0 \\
+\hline
+{ReverseListTest3} & 40\% & 3 & 0 & 0 \\
+\hline
+{WriterTest} & 47\% & 9 & 0 & 0 \\
+\hline
+{Existential} & 79\% & 3 & 0 & 0 \\
+\hline
+{TestMore} & 85\% & 6 & 2 & 0 \\
+\hline
+{CreatedBranchIsOk} & 72\% & 7 & 8 & 0 \\
+\hline
+{CanCheckIfUserHasAccessToLanguage} & 32\% & 12 & 1 & 0 \\
+\hline
+{Can\_Unpublish\_ContentVariation} & 89\% & 3 & 0 & 0 \\
+\hline
+{EnumMap} & 55\% & 5 & 0 & 0 \\
+\hline
+{InheritedMap} &  65\% & 4 & 2 & 0 \\
+\hline
+{Get\_All\_Blueprints} & 88\% & 3 & 0 & 11 \\
+\hline
+{ShouldStart} & 43\% & 4 & 0 & 0 \\
+\hline
+{ShouldSupportDualStackListenWhenServerV4All} & 75\% & 1 & 0 & 0 \\
+\hline
+{ShouldRespondToCompleteRequestCorrectly} & 73\% & 4 & 0 & 0 \\
+\hline
+{ConcurrentBeginWrites} & 86\% & 4 & 1 & 0 \\
+\hline
+{ConcurrentBeginWritesFirstEndWriteFails} & 81\% & 5 & 0 & 1 \\
+\hline
+{HeadersShouldBeCaseInsensitive} & 71\% & 2 & 0 & 0 \\
+\hline
+{TestNullability} & 87\% & 2 & 0 & 0 \\
+\hline
+{TestCheatcodeParsing} & 88\% & 1 & 0 & 0 \\
+\hline
+{SaveCreateBufferRoundTrip} & 77\% & 7 & 0 & 0 \\
+\hline
+{TestCRC32Stability} & 48\% & 9 & 5 & 0 \\
+\hline
+{TestSHA1LessSimple} & 50\% & 5 & 2 & 0 \\
+\hline
+{TestRemovePrefix} & 93\% & 1 & 0 & 0 \\
+\hline
+{TestActionModificationPickup1} & 39\% & 14 & 0 & 0 \\
+\hline
+{TestObservableAutoRun} & 88\% & 3 & 0 & 5 \\
+\hline
+{TestMapCrud} & 95\% & 2 & 0 & 0 \\
+\hline
+{TestObserver} & 97\% & 2 & 1 & 3 \\
+\hline
+{TestObserveValue} & 94\% & 2 & 2 & 4 \\
+\hline
+{TestTypeDefProxy} & 83\% & 8 & 1 & 1 \\
+\hline
+
+\end{tabular}
+}
+\end{center}
+\label{tab:results1}
+\end{table}

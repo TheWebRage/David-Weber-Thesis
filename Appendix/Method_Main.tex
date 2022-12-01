@@ -1,0 +1,59 @@
+\clearpage % clear the prior chapter's page
+
+\label{Main Method}
+%\vspace{-7mm}
+%\bigskip
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Shows a few examples about using the Adaptive Extention methods
+/// </summary>
+/// <param name="args">Arguments to control what to simplify; (Path to test, name of test, path to testProj, output path)</param>
+static void Main(string[] args)
+{
+	if (args.Length != 4)
+	{
+		Console.WriteLine("Incorrect arguments\n");
+		return;
+	} else {
+		Console.WriteLine("Using command line arguments");
+		testExample = Path.GetFullPath(args[0]);
+		testName = args[1];
+		testProj = Path.GetFullPath(args[2]);
+		outputFilePath = Path.GetFullPath(args[3]);
+	}
+
+	SyntaxList<StatementSyntax> testStatementsRaw = Extentions.GetTestStatements(testExample, testName);
+
+	List<StatementSyntax> testStatements = new List<StatementSyntax>(testStatementsRaw);
+	Func<List<StatementSyntax>, bool> buildAndCompareTest = BuildAndRunTest;
+
+	Extentions.SetTestStatements(testExample, Path.Combine(outputFilePath, "Original", testName + "_" + Path.GetFileName(testExample)), testName, testStatements);
+
+	List<StatementSyntax> simplifiedStatements = new List<StatementSyntax>();
+
+	try
+	{
+		// Run algorithm with parameters
+		simplifiedStatements = Extentions.FindSmallestFailingInput<StatementSyntax>(testStatements, buildAndCompareTest);
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine(ex.Message);
+	}
+	finally
+	{
+		// Revert the original test file back to the original form
+		Extentions.SetTestStatements(testExample, testExample, testName, testStatements);
+		Console.WriteLine("Reverting the original file.\nHere is the original file");
+	}
+
+	Extentions.SetTestStatements(testExample, Path.Combine(outputFilePath, "Simplified", testName + "_" + Path.GetFileName(testExample)), testName, simplifiedStatements);
+	Console.WriteLine("Here are the simpified results.");
+}
+\end{lstlisting}
+\caption{Main method in \mytool}
+\label{fig:main1}
+%\vspace{-0.5in}
+\end{figure}
