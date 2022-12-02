@@ -1,0 +1,29 @@
+
+\label{GetTestCallString Method}
+%\vspace{-7mm}
+%\bigskip
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Gets the string to only build the one test instead of the entire project.
+/// </summary>
+/// <param name="testFilePath">Path to the test file</param>
+/// <param name="testName">Name of the test</param>
+/// <returns></returns>
+static public string GetTestCallString(string testFilePath, string testName)
+{
+	string text = File.ReadAllText(testFilePath);
+	SyntaxTree tree = CSharpSyntaxTree.ParseText(text);
+
+	CompilationUnitSyntax input = tree.GetCompilationUnitRoot();
+	var nameSpaceOriginal = ((NamespaceDeclarationSyntax)input.Members[0]);
+	var classOriginal = (ClassDeclarationSyntax)nameSpaceOriginal.Members[0];
+
+	return nameSpaceOriginal.Name + "." + classOriginal.Identifier + "." + testName;
+}
+\end{lstlisting}
+\caption{GetTestCallString method in \mytool}
+\label{fig:GetTestCallString1}
+%\vspace{-0.5in}
+\end{figure}

@@ -1,0 +1,72 @@
+
+\label{SetTestStatements Method}
+%\vspace{-7mm}
+%\bigskip
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Gets the statement list for the test file provided
+/// </summary>
+/// <param name="testFilePath">Test file path for the statement list</param>
+/// <returns>Statement list for the test provided</returns>
+static public bool SetTestStatements(string testFilePath, string outputFilePath, string testName, List<StatementSyntax> statementsToReplace)
+{
+	if (!File.Exists(outputFilePath))	{
+		try	{
+			if (!Directory.Exists(Path.GetDirectoryName(outputFilePath)))	{
+				Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
+			}
+
+			FileStream file = File.Create(outputFilePath);
+			file.Close();
+		}
+		catch (Exception ex)
+		{
+			return false;
+		}
+	}
+
+	string text = File.ReadAllText(testFilePath);
+	SyntaxTree tree = CSharpSyntaxTree.ParseText(text);
+
+	CompilationUnitSyntax input = tree.GetCompilationUnitRoot();
+	var nameSpaceOriginal = ((NamespaceDeclarationSyntax)input.Members[0]);
+	var classOriginal = (ClassDeclarationSyntax)nameSpaceOriginal.Members[0];
+
+	MethodDeclarationSyntax methodSyntax = null;
+	var classMembers = classOriginal.DescendantNodes().OfType<MemberDeclarationSyntax>();
+
+	// Search the members looking for a method with the same name as the test
+	foreach (var member in classMembers)
+	{
+		var method = member as MethodDeclarationSyntax;
+		if (method != null)
+		{
+			if (method.Identifier.ToString() == testName)
+			{
+				methodSyntax = method;
+				break;
+			}
+		}
+	}
+
+	if (methodSyntax == null) return false;
+
+	var blockX = (BlockSyntax)methodSyntax.Body;
+	var statements = blockX.RemoveNodes(blockX.Statements, SyntaxRemoveOptions.KeepNoTrivia);
+	var x = statements.AddStatements(statementsToReplace.ToArray());
+
+	MethodDeclarationSyntax tempMethod = methodSyntax.WithBody(x);
+	var newClass = classOriginal.ReplaceNode(methodSyntax, tempMethod);
+	var output = input.ReplaceNode(classOriginal, newClass);
+
+	WaitForFile(outputFilePath);
+	File.WriteAllText(outputFilePath, output.ToString());
+	return true;
+}
+\end{lstlisting}
+\caption{SetTestStatements method in \mytool}
+\label{fig:SetTestStatements1}
+%\vspace{-0.5in}
+\end{figure}

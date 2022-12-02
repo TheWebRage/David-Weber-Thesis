@@ -1,0 +1,49 @@
+
+\label{WaitForFile Method}
+%\vspace{-7mm}
+%\bigskip
+
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Blocks until the file is not locked any more.
+/// </summary>
+/// <param name="fullPath"></param>
+public static bool WaitForFile(string fullPath)
+{
+	int numTries = 0;
+	while (true)
+	{
+		++numTries;
+		try
+		{
+			// Attempt to open the file exclusively.
+			using (FileStream fs = new FileStream(fullPath,	 FileMode.Open, FileAccess.ReadWrite, FileShare.None, 100))
+			{
+				fs.ReadByte();
+
+				// If we got this far the file is ready
+				break;
+			}
+		}
+		catch (Exception ex)
+		{
+			Thread.Sleep(500);
+			if (numTries > 100)
+			{
+				return false;
+			}
+
+			// Wait for the lock to be released
+			System.Threading.Thread.Sleep(500);
+		}
+	}
+
+	return true;
+}
+\end{lstlisting}
+\caption{WaitForFile method in \mytool}
+\label{fig:WaitForFile1}
+%\vspace{-0.5in}
+\end{figure}

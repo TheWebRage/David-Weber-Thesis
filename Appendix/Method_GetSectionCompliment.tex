@@ -1,0 +1,35 @@
+
+\label{GetSectionCompliment Method}
+%\vspace{-7mm}
+%\bigskip
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Gets the compliment of the section provided
+/// </summary>
+/// <typeparam name="T">Type of the list to get the compliment of</typeparam>
+/// <param name="array">Array to get compliment from</param>
+/// <param name="sectionIndex">Index of the section to get the compliment of</param>
+/// <returns>Compliment of the section index provided</returns>
+static private List<T> GetSectionCompliment<T>(List<List<T>> array, int sectionIndex)
+{
+	List<T> compliment = new List<T>();
+
+	foreach (List<T> section in array)
+	{
+		if (array.IndexOf(section) == sectionIndex)
+		{
+			continue;
+		}
+
+		compliment.AddRange(section);
+	}
+
+	return compliment;
+}
+\end{lstlisting}
+\caption{GetSectionCompliment method in \mytool}
+\label{fig:GetSectionCompliment1}
+%\vspace{-0.5in}
+\end{figure}

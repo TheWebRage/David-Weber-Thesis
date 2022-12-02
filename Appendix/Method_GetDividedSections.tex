@@ -1,0 +1,54 @@
+
+\label{GetDividedSections Method}
+%\vspace{-7mm}
+%\bigskip
+
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Divides the array into equal parts
+/// </summary>
+/// <typeparam name="T">Type of the list to be split</typeparam>
+/// <param name="sizeOfArrays">Size of the parts to be split into</param>
+/// <param name="array">Array to be split</param>
+/// <returns>A list of equal parts of the array</returns>
+static private List<List<T>> GetDividedSections<T>(int numSections, List<T> array)
+{
+	List<List<T>> result = new List<List<T>>();
+
+	// Add all sub lists in list array
+	for (int i = 0; i < numSections; i++)
+	{
+		result.Add(new List<T>());
+	}
+
+	int split = array.Count / numSections;
+	int innerList = 0;
+
+	if (split == 0)
+	{
+		return result;
+	}
+
+	for (int i = 0; i < array.Count; i += split)
+	{
+		for (int j = i; j < array.Count && j < i + split; j++)
+		{
+			if (innerList >= numSections)
+			{
+				innerList--;
+			}
+			result[innerList].Add(array[j]);
+		}
+
+		innerList++;
+	}
+
+	return result;
+}
+\end{lstlisting}
+\caption{GetDividedSections method in \mytool}
+\label{fig:GetDividedSections1}
+%\vspace{-0.5in}
+\end{figure}

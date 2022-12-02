@@ -26,10 +26,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{array}
 \usepackage[table, svgnames]{xcolor}
 \usepackage{listings}
-\lstloadlanguages{
-C,
-csh
-}
+
 % -- Defining colors:
 \definecolor{codegreen}{rgb}{0.1,0.46,0.1}
 \definecolor{codeorange}{rgb}{0.83,0.56,0.26}
@@ -53,15 +50,7 @@ csh
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
-    tabsize=2,
-	morekeywords={ abstract, event, new, struct,as, explicit, null, switch,
-	base, extern, object, this,bool, false, operator, throw,break, finally, out, true,
-	byte, fixed, override, try,case, float, params, typeof,catch, for, private, uint,
-	char, foreach, protected, ulong,checked, goto, public, unchecked,
-	class, if, readonly, unsafe,const, implicit, ref, ushort,continue, in, return, using,
-	decimal, int, sbyte, virtual,	default, interface, sealed, volatile,
-	delegate, internal, short, void,do, is, sizeof, while,double, lock, stackalloc,
-	else, long, static,enum, namespace, string, try, catch, finally}
+    tabsize=2
 }
 \lstset{
   style=mystyle,
@@ -221,9 +210,18 @@ csh
 
 \singlespacing
 \appendix
+\clearpage % clear the prior chapter's page
+\chapter{Methods}
 \input{Appendix/Method_BuildAndRun}
 \input{Appendix/Method_FindSmallestFailingInput}
 \input{Appendix/Method_Main}
+\input{Appendix/Method_GetDividedSections}
+\input{Appendix/Method_GetSectionCompliment}
+\input{Appendix/Method_GetTestStatements}
+\input{Appendix/Method_SetTestStatements}
+\input{Appendix/Method_WaitForFile}
+\input{Appendix/Method_GetTestCallString}
+\input{Appendix/Method_ExecuteCommand}
 
 \singlespacing
 %\bibliographystyle{apalike}

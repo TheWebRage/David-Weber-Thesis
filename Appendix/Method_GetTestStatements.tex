@@ -1,0 +1,44 @@
+\label{GetTestStatements Method}
+%\vspace{-7mm}
+%\bigskip
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Gets the statement list for the test file provided
+/// </summary>
+/// <param name="testFilePath">Test file path for the statement list</param>
+/// <returns>Statement list for the test provided</returns>
+static public SyntaxList<StatementSyntax> GetTestStatements(string testFilePath, string testName)
+{
+	string text = File.ReadAllText(testFilePath);
+	SyntaxTree tree = CSharpSyntaxTree.ParseText(text);
+
+	CompilationUnitSyntax input = tree.GetCompilationUnitRoot();
+	var nameSpaceOriginal = ((NamespaceDeclarationSyntax)input.Members[0]);
+	var classOriginal = (ClassDeclarationSyntax)nameSpaceOriginal.Members[0];
+
+	var classMembers = classOriginal.DescendantNodes().OfType<MemberDeclarationSyntax>();
+	MethodDeclarationSyntax method = null;
+
+	foreach (var member in classMembers)
+	{
+		var potentialMethod = member as MethodDeclarationSyntax;
+		if (potentialMethod != null)
+		{
+			if (potentialMethod.Identifier.ToString() == testName)
+			{
+				method = potentialMethod;
+			}
+		}
+	}
+
+	var blockX = (BlockSyntax)method?.Body;
+
+	return blockX.Statements;
+}
+\end{lstlisting}
+\caption{GetTestStatements method in \mytool}
+\label{fig:GetTestStatements1}
+%\vspace{-0.5in}
+\end{figure}

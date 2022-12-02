@@ -1,0 +1,46 @@
+
+\label{ExecuteCommand Method}
+%\vspace{-7mm}
+%\bigskip
+
+
+\begin{figure}
+\begin{lstlisting}[language=C]
+/// <summary>
+/// Runs a cmd command from another process
+/// </summary>
+/// <param name="fileName">Command to run</param>
+/// <param name="arguments">Arguments to run with the command</param>
+/// <returns>True if successful; False if unsucessful</returns>
+static public bool ExecuteCommand(string fileName, string arguments, int timeout = 5000)
+{
+	try
+	{
+		ProcessStartInfo processInfo;
+		Process process;
+
+		processInfo = new ProcessStartInfo(fileName, arguments);
+		//processInfo.CreateNoWindow = false;
+		//processInfo.UseShellExecute = false;
+		processInfo.RedirectStandardOutput = true;
+
+		process = new Process();
+		process.StartInfo = processInfo;
+
+		process.Start();
+
+		process.WaitForExit(timeout);
+		string output = process.StandardOutput.ReadToEnd();
+		return process.ExitCode == 0;
+	}
+	catch (Exception ex)
+	{
+		return false;
+	}
+}
+
+\end{lstlisting}
+\caption{ExecuteCommand method in \mytool}
+\label{fig:ExecuteCommand1}
+%\vspace{-0.5in}
+\end{figure}
