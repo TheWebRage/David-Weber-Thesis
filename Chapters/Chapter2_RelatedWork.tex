@@ -16,12 +16,12 @@ The HDD algorithm is useful for finding and reducing code and tests within a tre
 \begin{center}
 \begin{figure}[!ht]
 \includegraphics[width=\linewidth]{hddFigure.png}
-\caption{HDD algorithm~\cite{misherghi_su_2009}}
+\caption{HDD algorithm~\cite{misherghi2006hdd}}
 \label{fig:hddFigure}
 \end{figure}
 \end{center}
 
-Regerhr et al. proposed C-Reduce to simplify tests for C compiler testing that uses DD as a starting point and further generalizes it. They also look into the test case validity problem to handle undefined and unspecified behavior. Their work showed significant improvement in simplifying C compiler tests that were produced by C-Smith (a random testing tool for C compiler testing) compared to other approaches~\cite{regehr2012test}.
+Regehr et al. proposed C-Reduce to simplify tests for C compiler testing that uses DD as a starting point and further generalizes it. They also look into the test case validity problem to handle undefined and unspecified behavior. Their work showed significant improvement in simplifying C compiler tests that were produced by C-Smith (a random testing tool for C compiler testing) compared to other approaches~\cite{regehr2012test}.
 
 Fuzzers are random testing mechanisms. When fuzzers are used to find bugs, they tend to find the same bugs repetitively. This makes it harder to find diverse bugs early. Fuzzer taming is used to make fuzzers produce more diverse bugs early or to categorize the bugs such that different bugs fall into different categories. Pei et al. combined delta-debugging trails with Furthest Point First algorithm to produce diverse bugs early~\cite{7022682}.
 
