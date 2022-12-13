@@ -1,0 +1,19 @@
+\clearpage % clear the prior chapter's page
+
+\chapter{Conclusion and Further Work}\label{CH8_Conclusion}
+%\vspace{-7mm}
+%\bigskip
+
+\section{Further Work}
+
+Even though \mytool shows usefulness and effectiveness, there is still much that can be improved. One major downside to this approach is the lack of HDD in the program. \mytool will attempt to parse the unit tests as a flat structure every time, regardless of statement structure. This has the potential to perform poorly and inaccurately for more complex tree structures that may contain loops, conditional statements, or action type statements. The results of this research show that a majority of C\# tests consist of flat statement structures. Therefore, we can take advantage of this and use DD for the majority of these tests. If we then implement an HDD approach as well, we can benefit from both approaches for this tool. Using DD for flat structures for faster parsing and using HDD for complex trees allows for a greater effectiveness of the simplification. 
+
+Another area of improvement that can be researched is performance enhancement. Simplifying these 30 unit tests using \mytool took a considerable amount of time. For example, the language-ext project has over 2600 unit tests. \mytool could take up to days, or even weeks, to simplify all of these tests. Additionally, if this was introduced as a step in a pipeline, then it would be expensive to utilize. However, if performance increases were found and implemented, then \mytool would be an even more efficient and effective tool.
+
+Another performance enhancement that can be applied to \mytool is utilizing control flow and data flow analysis. By implementing these features, \mytool would only need to compile the specific test that is being changed, without needing to build the entire solution or unit test project. Furthermore, this will not add any additional dependencies, keeping \mytool easy to implement and use for existing environments.
+
+\section{Conclusion}
+
+Research tools are mostly focused on a very limited set of programming languages. These research tools are mainly focused on the languages of C and Java. As more C\# projects become available as open source, availability of the tools in C\# will let us compare and validate concepts and tools. If we want to see widespread adoption of research tools in the industry, we need to factor in the ecosystem that developers of a particular programming language use. Ease of use should be given the utmost priority. While developing \mytool, we considered the C\# ecosystem that uses Visual Studio, C\# projects, solutions and unit test frameworks.
+
+After running through these tests and conducting experiments on 30 synthetic bugs, \mytool performed well with great results. In was able to parse nearly all of the unit tests correctly and even a majority of the tests were simplified perfectly. Only a handful of these unit tests had necessary statements removed. However, from an initial perspective, implementing another HDD approach alongside this DD approach seems to be the solution for most of these issues. Additionally, it seems current coding standards allow for the DD algorithm to be utilized, resulting with the effectiveness and efficiency of this simple tool. Because of these factors, \mytool is easy to use, applicable, and accurate.   

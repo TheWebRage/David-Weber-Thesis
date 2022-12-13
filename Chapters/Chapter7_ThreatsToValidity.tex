@@ -1,0 +1,33 @@
+\clearpage % clear the prior chapter's page
+
+\chapter{Threats to Validity}\label{CH7_ThreatsToValidity}
+%\vspace{-7mm}
+%\bigskip
+
+\section{Construct Validity}
+
+Do our measurements indeed reflect the advantages of \mytool?
+
+Our experiments on \mytool were conducted on 30 failing unit tests from a variety of open source projects. The results of our experiments found that \mytool has 96.58\% precision and 96.45\% recall. \mytool was able to reduce these 30 failing tests efficiently and accurately while still being simple to use. Furthermore, we analyze the results of the experiment and find that the failures are related to tree-like structures, which are not supported by \mytool.
+
+\section{Internal Validity}
+
+Did we mitigate bias during the experiment with \mytool?
+
+We mitigated bias during our experiment by selecting projects with a variety of uses, developers, and project sizes. We also selected tests based on previous commits in order to create synthetic bugs. Based on our resources, we were limited to open source projects and synthetic bugs in order to test \mytool. However, these projects are complex and actively maintained which reflects typical code base structures in industry settings. We expect \mytool to perform with similar results in other settings.
+
+\section{External Validity}
+
+Do our results generalize?
+
+We expect our results to generalize across other projects because we selected these open source projects from a variety of backgrounds. We foresee no issues regarding generalization of these results.
+
+\mytool is a tool that is limited to a C\# environment, which reduces the generalization of the tool itself. However, the implementation of the algorithm can be generalized across other languages and frameworks as well.
+
+
+\section{Reliability}
+
+Is our evaluation reliable?
+
+The experimentation of \mytool was performed on a wide variety of tests, demonstrating the reliability of the tool with conclusive results. We are confident that further experimentation within the scope of \mytool's abilities will yield similar results.
+

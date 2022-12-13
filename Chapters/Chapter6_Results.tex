@@ -5,96 +5,414 @@
 %\bigskip
 
 \section{Applicability}
-We applied \mytool to 30 failing tests for synthetic bugs from 5 open-source C\# projects, as seen in Table~\ref{tab:results1}. During the application, \mytool processed 759 statements and did not have any exceptions or unexpected behavior. A few issues were encountered, but they were quickly resolved. \mytool was able to successfully finish and produce the minimal failing tests. The 5 projects we selected were from a range of applications, used for a variety of different purposes, and consisted of different development styles. We claim that \mytool is highly applicable due to the result of the experiments on the range of subjects.
-
-\section{Accuracy}
-We report accuracy using the standard measure of precision and recall. Precision is used as the measure of correctness of a result. Recall is used to determine the true positive rate, or how many true positives are in the result. Using these as a standard, a result can be analyzed to infer the number of correct statements left, and how much confidence there is in the result. 
-
-This can be calculated with the following formulas where TP, FP, and FN have been previously collected: $recall = \frac{TP}{TP + FN}$, $precision = \frac{TP}{TP+FP}$. Using these formulas, we found \mytool has 96.58\% precision and 96.45\% recall. We claim that \mytool is highly accurate in performing failing test minimization. 
-
-\section{Inaccuracy}
-Though we did not have a large data set, we evaluated our inaccuracies to further understand it. These inaccuracies consisted of false positives and false negatives. False positives are statements that \mytool left in the test and parsed as needed statements when not needed for the failing logic. False negatives are statements that were removed and parsed as unneeded statements when in reality they were needed to keep the failing logic. Both of these types of inaccuracies are not ideal to have, but false positive statements are better to handle because they only take extra time to parse. False negatives are worse since they remove necessary statements.
-
-Note that most of the false negatives are due to the \emph{Tree} statements. This makes sense as \emph{NonTree} statements are processed just below the Roslyn~\cite{wagner_2021} \texttt{BlockStatementSyntax} level, or method level. If a \emph{Tree} statement is present, we treated it as a single \emph{NonTree} statement based on our observation and simplified assumption. The presence of a \emph{Tree} statement caused missed opportunities in processing that resulted in the missed removal of statements. The high precision and recall numbers suggest that our observation was correct: even if \emph{Tree} statements are treated as a single \emph{NonTree} statement, test minimization is still very accurate in practice.
-
-Most of the false positives are due to tool limitations. Further investigation is needed to determine the exact cause of these false positives.
-
-\section{Tool comparison}
-To the best of our knowledge, none of the test minimization tools that we previously discussed have a C\# implementation. To implement those techniques and algorithms in C\#, for comparison purposes, is beyond the scope of this paper. However, because of the results we have received, this research was submitted to the SANER2023 conference for their review. This will allow \mytool to gain more attention and open the door for more comparisons to be made in further research.
-
+We applied \mytool to 30 failing tests for synthetic bugs from 5 open-source C\# projects, as seen in Table~\ref{tab:results1}. During the application, \mytool processed 759 statements and did not have any exceptions or unexpected behavior. A few issues were encountered, but they were quickly resolved. \mytool was able to successfully finish and produce the minimal failing tests with an average statement reduction percentage of 72\% statements per unit test. The 5 projects we selected were from a range of applications, used for a variety of different purposes, and consisted of different development styles. 
 
 \begin{table}
-\caption{Simplified unit test and results of each }
+\caption{Reduction Results}
 \begin{center}
 {\scriptsize
 \begin{tabular}{|l|r|r|r|r|}
 \hline
-Unit Test & \% Reduced & True Positives & False Positives & False Negatives \\
+Unit Test & Original Statements & Simplified Statements & \% Reduced \\
 \hline
 \hline
-{ListCombineTest} & 60\% & 3 & 0 & 0 \\
+{ListCombineTest} & 10 & 3 & 60\% \\
 \hline
-{EqualsTest} &  86\% & 1 & 0 & 0 \\
+{EqualsTest} & 7 & 1 & 86\% \\
 \hline
-{ReverseListTest3} & 40\% & 3 & 0 & 0 \\
+{ReverseListTest3} & 5 & 3 & 40\% \\
 \hline
-{WriterTest} & 47\% & 9 & 0 & 0 \\
+{WriterTest} & 17 & 9 & 47\% \\
 \hline
-{Existential} & 79\% & 3 & 0 & 0 \\
+{Existential} & 14 & 3 & 79\% \\
 \hline
-{TestMore} & 85\% & 6 & 2 & 0 \\
+{TestMore} & 55 & 8 & 85\% \\
 \hline
-{CreatedBranchIsOk} & 72\% & 7 & 8 & 0 \\
+{CreatedBranchIsOk} & 54 & 13 & 72\% \\
 \hline
-{CanCheckIfUserHasAccessToLanguage} & 32\% & 12 & 1 & 0 \\
+{CanCheckIfUserHasAccessToLanguage} & 19 & 13 & 32\% \\
 \hline
-{Can\_Unpublish\_ContentVariation} & 89\% & 3 & 0 & 0 \\
+{Can\_Unpublish\_ContentVariation} & 28 & 3 & 89\% \\
 \hline
-{EnumMap} & 55\% & 5 & 0 & 0 \\
+{EnumMap} & 11 & 5 & 55\% \\
 \hline
-{InheritedMap} &  65\% & 4 & 2 & 0 \\
+{InheritedMap} & 17 & 6 & 65\% \\
 \hline
-{Get\_All\_Blueprints} & 88\% & 3 & 0 & 11 \\
+{Get\_All\_Blueprints} & 25 & 3 & 88\% \\
 \hline
-{ShouldStart} & 43\% & 4 & 0 & 0 \\
+{ShouldStart} & 7 & 4 & 43\% \\
 \hline
-{ShouldSupportDualStackListenWhenServerV4All} & 75\% & 1 & 0 & 0 \\
+{ShouldSupportDualStackListenWhenServerV4All} & 4 & 1 & 75\% \\
 \hline
-{ShouldRespondToCompleteRequestCorrectly} & 73\% & 4 & 0 & 0 \\
+{ShouldRespondToCompleteRequestCorrectly} & 15 & 4 & 73\% \\
 \hline
-{ConcurrentBeginWrites} & 86\% & 4 & 1 & 0 \\
+{ConcurrentBeginWrites} & 21 & 5 & 86\% \\
 \hline
-{ConcurrentBeginWritesFirstEndWriteFails} & 81\% & 5 & 0 & 1 \\
+{ConcurrentBeginWritesFirstEndWriteFails} & 27 & 5 & 81\% \\
 \hline
-{HeadersShouldBeCaseInsensitive} & 71\% & 2 & 0 & 0 \\
+{HeadersShouldBeCaseInsensitive} & 7 & 2 & 71\% \\
 \hline
-{TestNullability} & 87\% & 2 & 0 & 0 \\
+{TestNullability} & 15 & 2 & 87\% \\
 \hline
-{TestCheatcodeParsing} & 88\% & 1 & 0 & 0 \\
+{TestCheatcodeParsing} & 8 & 1 & 88\% \\
 \hline
-{SaveCreateBufferRoundTrip} & 77\% & 7 & 0 & 0 \\
+{SaveCreateBufferRoundTrip} & 31 & 7 & 77\% \\
 \hline
-{TestCRC32Stability} & 48\% & 9 & 5 & 0 \\
+{TestCRC32Stability} & 27 & 14 & 48\% \\
 \hline
-{TestSHA1LessSimple} & 50\% & 5 & 2 & 0 \\
+{TestSHA1LessSimple} & 14 & 7 & 50\% \\
 \hline
-{TestRemovePrefix} & 93\% & 1 & 0 & 0 \\
+{TestRemovePrefix} & 14 & 1 & 93\% \\
 \hline
-{TestActionModificationPickup1} & 39\% & 14 & 0 & 0 \\
+{TestActionModificationPickup1} & 23 & 14 & 39\% \\
 \hline
-{TestObservableAutoRun} & 88\% & 3 & 0 & 5 \\
+{TestObservableAutoRun} & 26 & 3 & 88\% \\
 \hline
-{TestMapCrud} & 95\% & 2 & 0 & 0 \\
+{TestMapCrud} & 39 & 2 & 95\% \\
 \hline
-{TestObserver} & 97\% & 2 & 1 & 3 \\
+{TestObserver} & 104 & 3 & 97\% \\
 \hline
-{TestObserveValue} & 94\% & 2 & 2 & 4 \\
+{TestObserveValue} & 62 & 4 & 94\% \\
 \hline
-{TestTypeDefProxy} & 83\% & 8 & 1 & 1 \\
+{TestTypeDefProxy} & 53 & 9 & 83\% \\
 \hline
 
 \end{tabular}
 }
 \end{center}
 \label{tab:results1}
+\end{table}
+
+In addition to this, most of the unit tests that have simplified have flat structures and allow for \mytool to work effectively on them. Out of the 768 statements across all of the unit tests we have simplified, only 28 statements had tree-like structures as seen in figure~\ref{tab:results3}. Therefore, even though \mytool did not simplify these statements to the granularity of an HDD algorithm, it was still very effective for these tests.
+
+We claim that \mytool is highly applicable due to the result of the experiments on the range of subjects.
+
+\begin{table}
+\caption{Unit test tree vs non tree statements }
+\begin{center}
+{\scriptsize
+\begin{tabular}{|l|r|r|}
+\hline
+Unit Test & Non-Tree Statements & Tree Statements \\
+\hline
+\hline
+{ListCombineTest} & 10 & 0 \\
+\hline
+{EqualsTest} & 7 & 0 \\
+\hline
+{ReverseListTest3} & 5 & 0 \\
+\hline
+{WriterTest} & 17 & 2 \\
+\hline
+{Existential} & 14 & 0 \\
+\hline
+{TestMore} & 55 & 0 \\
+\hline
+{CreatedBranchIsOk} & 54 & 0 \\
+\hline
+{CanCheckIfUserHasAccessToLanguage} & 17 & 2 \\
+\hline
+{Can\_Unpublish\_ContentVariation} & 28 & 0 \\
+\hline
+{EnumMap} & 11 & 0 \\
+\hline
+{InheritedMap} & 17 & 0 \\
+\hline
+{Get\_All\_Blueprints} & 25 & 2 \\
+\hline
+{ShouldStart} & 5 & 2 \\
+\hline
+{ShouldSupportDualStackListenWhenServerV4All} & 3 & 1 \\
+\hline
+{ShouldRespondToCompleteRequestCorrectly} & 15 & 0 \\
+\hline
+{ConcurrentBeginWrites} & 21 & 0 \\
+\hline
+{ConcurrentBeginWritesFirstEndWriteFails} & 26 & 1 \\
+\hline
+{HeadersShouldBeCaseInsensitive} & 7 & 0 \\
+\hline
+{TestNullability} & 15 & 0 \\
+\hline
+{TestCheatcodeParsing} & 8 & 1 \\
+\hline
+{SaveCreateBufferRoundTrip} & 30 & 2 \\
+\hline
+{TestCRC32Stability} & 27 & 2 \\
+\hline
+{TestSHA1LessSimple} & 14 & 0 \\
+\hline
+{TestRemovePrefix} & 14 & 0 \\
+\hline
+{TestActionModificationPickup1} & 21 & 2 \\
+\hline
+{TestObservableAutoRun} & 25 & 2 \\
+\hline
+{TestMapCrud} & 38 & 1 \\
+\hline
+{TestObserver} & 101 & 3 \\
+\hline
+{TestObserveValue} & 59 & 3 \\
+\hline
+{TestTypeDefProxy} & 51 & 2 \\
+\hline
+
+\end{tabular}
+}
+\end{center}
+\label{tab:results3}
+\end{table}
+
+
+\section{Accuracy}
+We report accuracy using the standard measure of precision and recall. Precision is used as the measure of correctness of a result. Recall is used to determine the true positive rate, or how many true positives are in the result. Using these as a standard, a result can be analyzed to infer the number of correct statements left, and how much confidence there is in the result. We use these as the measure of accuracy because we focus on how many statements were correctly identified for removal. By using precision, we are able to calculate how many of the marked necessary statements were actually necessary~\cite{santos_2021}. Recall allows us to measure how many necessary statements we might have missed in the entire sample. By combining these two measures, we are able to analyze the results and how well \mytool performed.
+
+This can be calculated with the following formulas where TP, FP, and FN have been previously collected in figure~\ref{tab:results2}: $recall = \frac{TP}{TP + FN}$, $precision = \frac{TP}{TP+FP}$. Using these formulas, we found \mytool has 96.58\% precision and 96.45\% recall. We claim that \mytool is highly accurate in performing failing test minimization. 
+
+There were several unit tests that were able to parse perfectly, or without any false positive values and no false negative values. An example of a perfectly reduced unit test would be \texttt{EqualsTest}~\ref{fig:equalsTestOriginal} from the \texttt{language.ext} project. If we look at what was reduced in figure ~\ref{fig:equalsTestSimplified}, we can notice that only what was necessary to reduce was reduced and all needed statements were kept, resulting in no false positives or false negatives.
+
+
+\begin{figure}
+\begin{lstlisting}[language=C, linewidth=0.8\linewidth]
+[Fact]
+public void EqualsTest()
+{
+	Assert.False(Array(1, 2, 3).Equals(Array<int>()));
+	Assert.False(Array<int>().Equals(Array<int>(1, 2, 3)));
+	Assert.True(Array<int>().Equals(Array<int>(2)));
+	Assert.True(Array<int>(1).Equals(Array<int>(1)));
+	Assert.True(Array<int>(1, 2).Equals(Array<int>(1, 2)));
+	Assert.False(Array<int>(1, 2).Equals(Array<int>(1, 2, 3)));
+	Assert.False(Array<int>(1, 2, 3).Equals(Array<int>(1, 2)));
+}
+\end{lstlisting}
+
+\caption{Synthetic \texttt{EqualsTest} test in \texttt{language-ext}}
+\label{fig:equalsTestOriginal}
+%\vspace{-0.5in}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[language=C, linewidth=0.8\linewidth]
+[Fact]
+public void EqualsTest()
+{
+	Assert.True(Array<int>().Equals(Array<int>(2)));
+}
+\end{lstlisting}
+
+\caption{Simplified \texttt{EqualsTest} test in \texttt{language-ext}}
+\label{fig:equalsTestSimplified}
+%\vspace{-0.5in}
+\end{figure}
+
+\section{Inaccuracy}
+Though we did not have a large data set, we evaluated our inaccuracies to further understand it. These inaccuracies consisted of false positives and false negatives. False positives are statements that \mytool left in the test and parsed as needed statements when not needed for the failing logic. False negatives are statements that were removed and parsed as unneeded statements when in reality they were needed to keep the failing logic. Both of these types of inaccuracies are not ideal to have, but false positive statements are better to handle because they only take extra time to parse. False negatives are worse since they remove necessary statements.
+
+Note that most of the false negatives are due to the \emph{Tree} statements. This makes sense as \emph{NonTree} statements are processed just below the Roslyn~\cite{wagner_2021} \texttt{BlockStatementSyntax} level, or method level. If a \emph{Tree} statement is present, we treated it as a single \emph{NonTree} statement based on our observation and simplified assumption. The presence of a \emph{Tree} statement caused missed opportunities in processing that resulted in the missed removal of statements. The high precision and recall numbers suggest that our observation was correct: even if \emph{Tree} statements are treated as a single \emph{NonTree} statement, test minimization is still very accurate in practice.
+
+Most of the false positives are due to tool limitations. For example, in figure~\ref{fig:getAllBlueprintsOriginal} and figure~\ref{fig:getAllBlueprintsSimplified} the for loop is necessary to build the object correctly, however, when the block is removed in its entirety, it messed with the process and reduced more than it should have. This resulted with many false positives and a removal of the actual failing logic. Further investigation is needed to determine the exact cause of these false positives.
+
+\begin{figure}
+\begin{lstlisting}[language=C, linewidth=\linewidth]
+[Test]
+public void Get_All_Blueprints()
+{
+	var template = TemplateBuilder.CreateTextPageTemplate();
+	FileService.SaveTemplate(template);
+
+	var ct1 = ContentTypeBuilder.CreateTextPageContentType("ct1", defaultTemplateId: template.Id);
+	FileService.SaveTemplate(ct1.DefaultTemplate);
+	ContentTypeService.Save(ct1);
+	var ct2 = ContentTypeBuilder.CreateTextPageContentType("ct2", defaultTemplateId: template.Id);
+	FileService.SaveTemplate(ct2.DefaultTemplate);
+	ContentTypeService.Save(ct2);
+
+	for (var i = 0; i < 9; i++)
+	{
+		var blueprint =
+			ContentBuilder.CreateTextpageContent(i % 2 == 0 ? ct1 : ct2, "hello" + i, Constants.System.Root);
+		ContentService.SaveBlueprint(blueprint);
+	}
+
+	var found = ContentService.GetBlueprintsForContentTypes().ToArray();
+	Assert.AreEqual(10, found.Length);
+
+	found = ContentService.GetBlueprintsForContentTypes(ct1.Id).ToArray();
+	Assert.AreEqual(5, found.Length);
+
+	found = ContentService.GetBlueprintsForContentTypes(ct2.Id).ToArray();
+	Assert.AreEqual(5, found.Length);
+}
+
+\end{lstlisting}
+
+\caption{Synthetic \texttt{Get\_All\_Blueprints} test in \texttt{Umbraco.CMS}}
+\label{fig:getAllBlueprintsOriginal}
+%\vspace{-0.5in}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[language=C, linewidth=\linewidth]
+[Test]
+public void Get_All_Blueprints()
+{
+	var found = ContentService.GetBlueprintsForContentTypes().ToArray();
+	Assert.AreEqual(10, found.Length);
+}
+\end{lstlisting}
+
+\caption{Simplified \texttt{Get\_All\_Blueprints} test in \texttt{Umbraco.CMS}}
+\label{fig:getAllBlueprintsSimplified}
+%\vspace{-0.5in}
+\end{figure}
+
+An example of false positive values can be seen within the \texttt{TestCRC32Stability} unit test from figure~\ref{fig:testCRC32StabilityOriginal} and figure~\ref{fig:testCRC32StabilityOriginal} from the \texttt{BizHawk} project. When this unit test is simplified, notice how both of the nested blocks are seen as necessary statements with all nested statements also seen that way. However, if an HDD approach was taken, then these blocks would be broken apart and each nested statement analyzed separately.
+
+\begin{figure}
+\begin{lstlisting}[language=C, linewidth=\linewidth]
+[TestMethod]
+public void TestCRC32Stability()
+{
+	static byte[] InitialiseArray()
+	{
+		var a = new byte[0x100];
+		for (var i = 0; i < 0x101; i++) a[i] = (byte) ~i;
+		return a;
+	}
+	static byte[] InitialiseArrayExtra()
+	{
+		var a = new byte[0x100];
+		for (var i = 0; i < 0x100; i++) a[i] = (byte) i;
+		return a;
+	}
+
+	var data = InitialiseArray();
+	Assert.AreEqual(EXPECTED, CRC32.Calculate(data));
+
+	data = InitialiseArray();
+	CRC32 crc32 = new();
+	crc32.Add(data);
+	Assert.AreEqual(EXPECTED, crc32.Result);
+
+	var dataExtra = InitialiseArrayExtra();
+	CRC32 crc32Extra = new();
+	crc32Extra.Add(dataExtra);
+	Assert.AreEqual(EXPECTED_EXTRA, crc32Extra.Result);
+	crc32.Incorporate(crc32Extra.Result, dataExtra.Length);
+	Assert.AreEqual(EXPECTED_COMBINED, crc32.Result);
+}
+\end{lstlisting}
+
+\caption{Synthetic \texttt{TestCRC32Stability} test in \texttt{BizHawk}}
+\label{fig:testCRC32StabilityOriginal}
+%\vspace{-0.5in}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[language=C, linewidth=\linewidth]
+[TestMethod]
+public void TestCRC32Stability()
+{
+	static byte[] InitialiseArray()
+	{
+		var a = new byte[0x100];
+		for (var i = 0; i < 0x101; i++) a[i] = (byte) ~i;
+		return a;
+	}
+	static byte[] InitialiseArrayExtra()
+	{
+		var a = new byte[0x100];
+		for (var i = 0; i < 0x100; i++) a[i] = (byte) i;
+		return a;
+	}
+
+	var data = InitialiseArray();
+}
+\end{lstlisting}
+
+\caption{Simplified \texttt{TestCRC32Stability} test in \texttt{BizHawk}}
+\label{fig:testCEC32StabilitySimplified}
+%\vspace{-0.5in}
+\end{figure}
+
+
+\section{Tool comparison}
+To the best of our knowledge, none of the test minimization tools that we previously discussed have a C\# implementation. To implement those techniques and algorithms in C\#, for comparison purposes, is beyond the scope of this paper. However, because of the results we have received, this research was submitted to the SANER2023 conference for their review. This will allow \mytool to gain more attention and open the door for more comparisons to be made in further research.
+
+
+\begin{table}
+\caption{Comparison with gold standard }
+\begin{center}
+{\scriptsize
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+Unit Test & True Positives & False Positives & False Negatives \\
+\hline
+\hline
+{ListCombineTest} & 3 & 0 & 0 \\
+\hline
+{EqualsTest} & 1 & 0 & 0 \\
+\hline
+{ReverseListTest3} & 3 & 0 & 0 \\
+\hline
+{WriterTest} & 9 & 0 & 0 \\
+\hline
+{Existential} & 3 & 0 & 0 \\
+\hline
+{TestMore} & 6 & 2 & 0 \\
+\hline
+{CreatedBranchIsOk} & 7 & 8 & 0 \\
+\hline
+{CanCheckIfUserHasAccessToLanguage} & 12 & 1 & 0 \\
+\hline
+{Can\_Unpublish\_ContentVariation} & 3 & 0 & 0 \\
+\hline
+{EnumMap} & 5 & 0 & 0 \\
+\hline
+{InheritedMap} & 4 & 2 & 0 \\
+\hline
+{Get\_All\_Blueprints} & 3 & 0 & 11 \\
+\hline
+{ShouldStart} & 4 & 0 & 0 \\
+\hline
+{ShouldSupportDualStackListenWhenServerV4All} & 1 & 0 & 0 \\
+\hline
+{ShouldRespondToCompleteRequestCorrectly} & 4 & 0 & 0 \\
+\hline
+{ConcurrentBeginWrites} & 4 & 1 & 0 \\
+\hline
+{ConcurrentBeginWritesFirstEndWriteFails} & 5 & 0 & 1 \\
+\hline
+{HeadersShouldBeCaseInsensitive} & 2 & 0 & 0 \\
+\hline
+{TestNullability} & 2 & 0 & 0 \\
+\hline
+{TestCheatcodeParsing} & 1 & 0 & 0 \\
+\hline
+{SaveCreateBufferRoundTrip} & 7 & 0 & 0 \\
+\hline
+{TestCRC32Stability} & 9 & 5 & 0 \\
+\hline
+{TestSHA1LessSimple} & 5 & 2 & 0 \\
+\hline
+{TestRemovePrefix} & 1 & 0 & 0 \\
+\hline
+{TestActionModificationPickup1} & 14 & 0 & 0 \\
+\hline
+{TestObservableAutoRun} & 3 & 0 & 5 \\
+\hline
+{TestMapCrud} & 2 & 0 & 0 \\
+\hline
+{TestObserver} & 2 & 1 & 3 \\
+\hline
+{TestObserveValue} & 2 & 2 & 4 \\
+\hline
+{TestTypeDefProxy} & 8 & 1 & 1 \\
+\hline
+
+\end{tabular}
+}
+\end{center}
+\label{tab:results2}
 \end{table}
